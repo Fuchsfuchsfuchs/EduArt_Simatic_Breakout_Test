@@ -1,0 +1,8 @@
+﻿Designator,Footprint,Quantity,Value,LCSC Part #
+A1,Arduino_Nano,1,Arduino_Nano_Every,
+A2,Arduino_UNO_R2,1,Arduino_UNO_R2,
+"C1, C10, C11, C12, C13, C14, C15, C16, C17, C18, C2, C3, C4, C5, C6, C7, C8, C9",0603,18,C,
+"D1, D10, D11, D12, D13, D14, D15, D16, D17, D18, D2, D3, D4, D5, D6, D7, D8, D9",LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm,18,WS2812B,
+D19,0603,1,LED,
+J1,PinHeader_2x02_P2.54mm_Vertical,1,Conn_02x02_Odd_Even,
+R1,0603,1,R,
