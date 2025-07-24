@@ -10,7 +10,7 @@ Flash the Arduino Nano with the **NANO_PCB_TEST.ino** and place the Testboard on
 
 First run 
 ```
-chmod +x IOT_PCB_TEST.y
+chmod +x IOT_PCB_TEST.py
 ```
 to make the file executable. After that you can run the programm with:
 ```
