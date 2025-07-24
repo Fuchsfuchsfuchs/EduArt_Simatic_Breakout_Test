@@ -25,7 +25,7 @@ The paired GPIOs are the following: A0 and D8, A1 and D9, A2 and D10, A3 and D11
 
 | Component    | Datasheet | Amount | Value  |
 | ------------ | --------- | ------ | ------ |
-| LED 1        | ToDo      | 18     |        |
+| LED 1        | [WS2812B](https://www.digikey.com/en/htmldatasheets/production/1829370/0/0/1/ws2812b)      | 18     |        |
 | Capacitors   | ToDo      | 18     | 100 nF |
 | Arduino Nano | ToDo      | 1      |        |
 | Resistor     | ToDo      | 1      | 10K    |
