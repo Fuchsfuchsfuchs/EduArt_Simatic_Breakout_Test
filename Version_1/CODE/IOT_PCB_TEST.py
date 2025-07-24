@@ -4,11 +4,11 @@ import time
 # Konfiguration
 digital_out_phase1 = [1, 2, 3, 4, 5, 6]     # D1–D6
 analog_inputs      = [0, 1, 2, 3, 4, 5]     # A0–A5
-digital_out_phase2 = [7, 8, 9, 10, 11, 12]  # D7–D12
+digital_outputs    = [7, 8, 9, 10, 11, 12]  # D7–D12 (zugeordnet zu A0–A5)
 
-analog_threshold = 0.5  # Wert von 0.0–1.0 (z. B. ~2.5V bei 5V Referenz)
+analog_threshold = 0.5  # Schwelle für analog HIGH (z. B. 2.5V bei 5V)
 
-# === Phase 1: D1–D6 nacheinander HIGH schalten ===
+# === Phase 1: D1–D6 nacheinander HIGH setzen ===
 print("Phase 1: D1–D6 nacheinander auf HIGH setzen")
 for pin_num in digital_out_phase1:
     try:
@@ -20,47 +20,42 @@ for pin_num in digital_out_phase1:
     except Exception as e:
         print(f"Fehler bei D{pin_num}: {e}")
 
-# === Phase 2: Analoge Eingänge prüfen ===
-print("Phase 2: A0–A5 auf HIGH prüfen (analog > threshold)")
-any_high = False
-for aio_pin in analog_inputs:
+# === Phase 2: A0–A5 lesen und zugehörige D7–D12 setzen ===
+print("Phase 2: A0–A5 lesen und direkt zugeordnete D7–D12 setzen")
+max_adc = 1023  # Maximalwert des ADC (abhängig vom Board)
+
+# Merken, welche digitalen Pins gesetzt wurden
+used_digital_outputs = []
+
+for i in range(len(analog_inputs)):
+    aio_pin = analog_inputs[i]
+    d_pin   = digital_outputs[i]
     try:
         aio = mraa.Aio(aio_pin)
-        raw = aio.read()  # z. B. 0–1023 bei 10-bit ADC
-        max_adc = 1023     # Setze passend zu deinem Board
+        raw = aio.read()
         voltage_ratio = raw / max_adc
         print(f"A{aio_pin} = {voltage_ratio:.2f} (Rohwert: {raw})")
+        time.sleep(0.2)
         if voltage_ratio >= analog_threshold:
-            any_high = True
-    except Exception as e:
-        print(f"Fehler beim Lesen von A{aio_pin}: {e}")
-
-# === Phase 3: Falls HIGH anliegt, D7–D12 HIGH setzen ===
-if any_high:
-    print("HIGH erkannt an A0–A5 – D7–D12 auf HIGH setzen")
-    for pin_num in digital_out_phase2:
-        try:
-            pin = mraa.Gpio(pin_num)
+            pin = mraa.Gpio(d_pin)
             pin.dir(mraa.DIR_OUT)
             pin.write(1)
-            print(f"D{pin_num} -> HIGH")
-            time.sleep(0.2)
-        except Exception as e:
-            print(f"Fehler bei D{pin_num}: {e}")
-else:
-    print("Kein HIGH an A0–A5 erkannt – D7–D12 bleiben LOW")
+            used_digital_outputs.append(d_pin)
+            print(f"A{aio_pin} HIGH erkannt -> D{d_pin} -> HIGH")
+        else:
+            print(f"A{aio_pin} unterhalb der Schwelle – D{d_pin} bleibt LOW")
+    except Exception as e:
+        print(f"Fehler bei A{aio_pin}/D{d_pin}: {e}")
 
+# === Warten ===
+time.sleep(5)
 
-# === Phase 3: bisschen warten jaja
+# === Alle verwendeten digitalen Pins rückwärts auf LOW setzen ===
+all_pins = digital_out_phase1 + used_digital_outputs
+all_pins = list(set(all_pins))  # doppelte vermeiden
+all_pins.sort(reverse=True)    # absteigend sortieren
 
-time.sleep(4)
-
-# === Abschließend: Alle verwendeten digitalen Pins rückwärts auf LOW setzen ===
-
-all_pins = digital_out_phase1 + digital_out_phase2
-all_pins.reverse()  # Reihenfolge umdrehen
-
-print("Alle digitalen Ausgänge rückwärts zurück auf LOW setzen...")
+print("Alle verwendeten digitalen Ausgänge rückwärts auf LOW setzen...")
 for pin_num in all_pins:
     try:
         pin = mraa.Gpio(pin_num)
