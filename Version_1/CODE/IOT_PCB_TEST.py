@@ -53,7 +53,7 @@ else:
 
 # === Phase 3: bisschen warten jaja
 
-time.sleep(5)
+time.sleep(4)
 
 # === Abschließend: Alle verwendeten digitalen Pins rückwärts auf LOW setzen ===
 
