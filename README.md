@@ -18,7 +18,7 @@ sudo python3 IOT_TEST_PCB.py
 ```
 
 GPIOs D0 and D1 are not tested, they are non existent on the Breakout board and are used to communicate with the Motorcontrollers.
-The GPIOs D2 - D7 are directly tested if they are connected. GPIOs D8 to D13 and A0 to A5 are tested in Pairs. So A0 gets a Signal from the Arduino and D8 is set to Output a HIGH Signal, which the Arduino receives and the A0 and D8 LEDs will light up. If one of the GPIOs is not connected or doesnt work properly both LEDs (A0 and D8) will not work.
+The GPIOs D2 - D7 are directly tested if they are connected. GPIOs D8 to D13 and A0 to A5 are tested in pairs. So A0 gets a Signal from the Arduino and D8 is set to Output a HIGH Signal, which the Arduino receives and the A0 and D8 LEDs will light up. If one of the GPIOs is not connected or doesnt work properly both LEDs (A0 and D8) will not work.
 The paired GPIOs are the following: A0 and D8, A1 and D9, A2 and D10, A3 and D11, A4 and D12, A5 and D13.
 
 ## Bill of Materials (BOM)
